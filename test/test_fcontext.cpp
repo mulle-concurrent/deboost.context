@@ -51,11 +51,6 @@ int main()
     jump_fcontext(ctx, NULL);
     puts("END");
 
-    ctx = make_fcontext(s.sptr, s.ssize, foo);
-    ctx2 = make_fcontext(s2.sptr, s2.ssize, doo);
-    jump_fcontext(ctx, NULL);
-    puts("SecondEND");
-
     destroy_fcontext_stack(&s);
     destroy_fcontext_stack(&s2);
     return 0;
