@@ -1,21 +1,20 @@
+# PROJECT: fcontext
 cmake_minimum_required(VERSION 3.0)
 project(fcontext)
-enable_language(CXX ASM)
+
+if (MSVC)
+    enable_language(CXX ASM_MASM)
+else()
+    enable_language(CXX ASM)
+endif()
 
 include_directories(include/fcontext)
 
 if(MSVC)
-  set(CompilerFlags
-        CMAKE_CXX_FLAGS
-        CMAKE_CXX_FLAGS_DEBUG
-        CMAKE_CXX_FLAGS_RELEASE
-        CMAKE_C_FLAGS
-        CMAKE_C_FLAGS_DEBUG
-        CMAKE_C_FLAGS_RELEASE
-        )
   add_definitions(-D_ITERATOR_DEBUG_LEVEL=0)
   add_definitions(-D_HAS_EXCEPTIONS=0)
 endif()
+add_definitions(-DBOOST_CONTEXT_EXPORT=)
 
 set(HEADER "include/fcontext/fcontext.h")
 set(SOURCES "source/stack.cpp")
@@ -23,15 +22,12 @@ set(SOURCES "source/stack.cpp")
 # Currently no cross-compiling or ARM configs are supported
 # Cpu Arch
 if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-    message("x86_64 compiler detected")
     set(CPU_ARCH "x86_64")
 else()
-    message("i386 compiler detected")
     set(CPU_ARCH "i386")
 endif()
 
 # OS
-message("System: ${CMAKE_SYSTEM_NAME}")
 if (UNIX)
     if (APPLE)
         set(ASM_EXT "sysv_macho_gas.S") # OSX
