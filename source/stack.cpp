@@ -8,17 +8,12 @@
 #if !defined(_WIN32) && (defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__)))
 /* UNIX-style OS. ------------------------------------------- */
 #   include <unistd.h>
-#if defined(_POSIX_VERSION)
-#   define _HAVE_POSIX
+#   define _HAVE_POSIX 1
 #endif
-#endif
-
 
 #ifdef _WIN32
-
-#define WIN32_LEAN_AND_LEAN
-#include <Windows.h>
-
+#   define WIN32_LEAN_AND_LEAN
+#   include <Windows.h>
 /* x86_64
  * test x86_64 before i386 because icc might
  * define __i686__ for x86_64 too */
@@ -27,9 +22,9 @@
     || defined(_M_X64) || defined(_M_AMD64)
 /* Windows seams not to provide a constant or function
  * telling the minimal stacksize */
-# define MIN_STACKSIZE  8 * 1024
+#   define MIN_STACKSIZE  8 * 1024
 #else
-# define MIN_STACKSIZE  4 * 1024
+#   define MIN_STACKSIZE  4 * 1024
 #endif
 
 static size_t getPageSize()
@@ -54,7 +49,7 @@ static size_t getDefaultSize()
     return 64 * 1024;   /* 64Kb */
 }
 
-#elif _HAVE_POSIX
+#elif defined(_HAVE_POSIX)
 #include <signal.h>
 #include <sys/resource.h>
 #include <sys/time.h>
@@ -132,7 +127,7 @@ fcontext_stack_t create_fcontext_stack(size_t size)
 
     DWORD old_options;
     VirtualProtect(vp, getPageSize(), PAGE_READWRITE | PAGE_GUARD, &old_options);
-#elif _HAVE_POSIX
+#elif defined(_HAVE_POSIX)
 # if defined(MAP_ANON)
     vp = mmap(0, size_, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
 # else
@@ -163,7 +158,7 @@ void destroy_fcontext_stack(fcontext_stack_t* s)
 
 #ifdef _WIN32
     VirtualFree(vp, 0, MEM_RELEASE);
-#elif _HAVE_POSIX
+#elif defined(_HAVE_POSIX)
     munmap(vp, s->ssize);
 #else
     free(vp);
