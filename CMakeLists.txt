@@ -42,7 +42,6 @@ set(ASM_SOURCES "asm/make_${CPU_ARCH}_${ASM_EXT}"
                 "asm/jump_${CPU_ARCH}_${ASM_EXT}"
                 "asm/ontop_${CPU_ARCH}_${ASM_EXT}")
 
-message(${ASM_SOURCES})
 add_library(fcontext STATIC ${SOURCES} ${ASM_SOURCES})
 
 install(TARGETS fcontext DESTINATION lib)
