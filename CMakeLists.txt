@@ -69,5 +69,6 @@ target_include_directories(fcontext
 
 set_target_properties(fcontext PROPERTIES FOLDER Deps ${IOS_GENERAL_PROPERTIES})
 
-#install(TARGETS fcontext DESTINATION lib)
-#install(FILES ${HEADER} DESTINATION include/fcontext)
+install(TARGETS fcontext DESTINATION lib)
+install(FILES ${HEADER} DESTINATION include/fcontext)
+
