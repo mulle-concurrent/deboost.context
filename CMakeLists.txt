@@ -1,6 +1,6 @@
 # PROJECT: fcontext
 cmake_minimum_required(VERSION 3.0)
-project(fcontext)
+project(fcontext C)
 
 if (NOT CMAKE_MODULE_PATH)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
