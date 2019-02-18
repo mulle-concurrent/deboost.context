@@ -1,6 +1,6 @@
 # PROJECT: fcontext
 cmake_minimum_required(VERSION 3.0)
-project(fcontext)
+project(fcontext C)
 
 if (NOT CMAKE_MODULE_PATH)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -19,7 +19,7 @@ endif()
 add_definitions(-DBOOST_CONTEXT_EXPORT=)
 
 set(HEADER "include/fcontext/fcontext.h")
-set(SOURCES "source/stack.cpp")
+set(SOURCES "source/stack.c")
 
 # OS
 if (APPLE)
@@ -63,11 +63,12 @@ set(ASM_SOURCES "asm/make_${CPU_ARCH}_${ASM_EXT}"
                 "asm/ontop_${CPU_ARCH}_${ASM_EXT}")
 
 add_library(fcontext STATIC ${SOURCES} ${ASM_SOURCES})
-target_include_directories(fcontext 
+target_include_directories(fcontext
     PRIVATE include/fcontext
     INTERFACE include)
 
 set_target_properties(fcontext PROPERTIES FOLDER Deps ${IOS_GENERAL_PROPERTIES})
 
-#install(TARGETS fcontext DESTINATION lib)
-#install(FILES ${HEADER} DESTINATION include/fcontext)
+install(TARGETS fcontext DESTINATION lib)
+install(FILES ${HEADER} DESTINATION include/fcontext)
+

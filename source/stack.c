@@ -80,7 +80,7 @@ static size_t getMinSize()
 
 static size_t getMaxSize()
 {
-    rlimit limit;
+    struct rlimit limit;
     getrlimit(RLIMIT_STACK, &limit);
 
     return (size_t)limit.rlim_max;
@@ -112,7 +112,7 @@ fcontext_stack_t create_fcontext_stack(size_t size)
     if (size > maxsz)
         size = maxsz;
 
-    pages = (size_t)floorf(float(size) / float(getPageSize()));
+    pages = (size_t)floorf((float)size/(float)getPageSize());
     assert(pages >= 2);     /* at least two pages must fit into stack (one page is guard-page) */
 
     size_ = pages * getPageSize();
