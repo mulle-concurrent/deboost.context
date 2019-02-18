@@ -19,7 +19,7 @@ endif()
 add_definitions(-DBOOST_CONTEXT_EXPORT=)
 
 set(HEADER "include/fcontext/fcontext.h")
-set(SOURCES "source/stack.cpp")
+set(SOURCES "source/stack.c")
 
 # OS
 if (APPLE)
@@ -63,7 +63,7 @@ set(ASM_SOURCES "asm/make_${CPU_ARCH}_${ASM_EXT}"
                 "asm/ontop_${CPU_ARCH}_${ASM_EXT}")
 
 add_library(fcontext STATIC ${SOURCES} ${ASM_SOURCES})
-target_include_directories(fcontext 
+target_include_directories(fcontext
     PRIVATE include/fcontext
     INTERFACE include)
 

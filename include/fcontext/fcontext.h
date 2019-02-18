@@ -8,17 +8,17 @@ extern "C" {
 #endif
     typedef void* fcontext_t;
 
-    struct fcontext_transfer_t
+    typedef struct
     {
         fcontext_t ctx;
         void* data;
-    };
+    } fcontext_transfer_t;
 
-    struct fcontext_stack_t
+    typedef struct
     {
         void* sptr;
         size_t ssize;
-    };
+    } fcontext_stack_t;
 
     /**
      * Callback definition for context (coroutine)
@@ -40,9 +40,9 @@ extern "C" {
      */
     fcontext_t make_fcontext(void * sp, size_t size, pfn_fcontext corofn);
 
-    fcontext_transfer_t ontop_fcontext(fcontext_t const to, void * vp, fcontext_transfer_t(*fn)(fcontext_transfer_t));   
+    fcontext_transfer_t ontop_fcontext(fcontext_t const to, void * vp, fcontext_transfer_t(*fn)(fcontext_transfer_t));
 
-    fcontext_stack_t create_fcontext_stack(size_t size = 0);
+    fcontext_stack_t create_fcontext_stack(size_t size);
     void destroy_fcontext_stack(fcontext_stack_t* s);
 
 #ifdef __cplusplus
