@@ -2,11 +2,13 @@
 cmake_minimum_required(VERSION 3.0)
 project(fcontext C)
 
+option(BUILD_TEST "build test app" 0)
+
 if (NOT CMAKE_MODULE_PATH)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 endif()
 
-if (MSVC)
+if (MSVC AND NOT CMAKE_C_COMPILER_ID MATCHES "Clang")
     enable_language(CXX ASM_MASM)
 else()
     enable_language(CXX ASM)
@@ -55,7 +57,15 @@ elseif (WIN32)
     else()
         set(CPU_ARCH "i386")
     endif()
-    set(ASM_EXT "ms_pe_masm.asm")
+
+    if (CMAKE_C_COMPILER_ID MATCHES "Clang")
+        set(ASM_EXT "ms_pe_clang_gas.S")
+    elseif (MSVC)
+        set(ASM_EXT "ms_pe_masm.asm")
+    elseif (CMAKE_C_COMPILER_ID MATCHES "GNU")
+        set(ASM_EXT "ms_pe_gas.S")
+    endif()
+    
 endif()
 
 set(ASM_SOURCES "asm/make_${CPU_ARCH}_${ASM_EXT}"
@@ -71,4 +81,9 @@ set_target_properties(fcontext PROPERTIES FOLDER Deps ${IOS_GENERAL_PROPERTIES})
 
 install(TARGETS fcontext DESTINATION lib)
 install(FILES ${HEADER} DESTINATION include/fcontext)
+
+if (BUILD_TEST)
+    add_executable(test_fcontext test/test_fcontext.c)
+    target_link_libraries(test_fcontext fcontext)
+endif()
 
